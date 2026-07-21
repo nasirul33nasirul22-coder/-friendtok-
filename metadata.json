@@ -1,0 +1,6 @@
+{
+  "name": "FriendTok",
+  "description": "A highly polished FriendTok web application featuring a News Feed, audio stories with music, responsive messaging with voice/image sharing, profile personalization, and UID-based friend systems.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
