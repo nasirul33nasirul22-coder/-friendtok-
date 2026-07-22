@@ -2,8 +2,8 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ "master", "main" ] # master এবং main দুটোতেই কাজ করবে
-  workflow_dispatch: # চাইলে আপনি GitHub পেজ থেকেও ম্যানুয়ালি ক্লিক করে বিল্ড চালাতে পারবেন
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
