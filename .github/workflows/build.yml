@@ -1,47 +1,48 @@
 name: Build Android APK
+
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: [ "master", "main" ] # master এবং main দুটোতেই কাজ করবে
+  workflow_dispatch: # চাইলে আপনি GitHub পেজ থেকেও ম্যানুয়ালি ক্লিক করে বিল্ড চালাতে পারবেন
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install
 
-      - name: Build Web Assets
-        run: npm run build || true
+      - name: Build Web App
+        run: npm run build
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Sync Capacitor Android
+        run: npx cap sync android
 
-      - name: Generate Wrapper & Build APK
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      - name: Build Android APK
         run: |
           cd android
-          gradle wrapper
-          chmod +x gradlew
-          ./gradlew assembleRelease --stacktrace
+          ./gradlew assembleDebug
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: friendtok-release-apk
-          path: |
-            android/app/build/outputs/apk/release/*.apk
-            android/app/build/outputs/apk/debug/*.apk
+          name: app-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
